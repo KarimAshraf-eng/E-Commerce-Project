@@ -17,6 +17,7 @@ def main():
     all_products = db.get_all_products()
     for p in all_products:
       product_id = p['productId']
+      
       product_object = Product(**p)
       product[product_id] = product_object
     # products = {p['productId']: Product(**p) for p in db.get_all_products()}
