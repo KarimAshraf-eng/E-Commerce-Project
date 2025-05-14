@@ -10,7 +10,13 @@ class Inventory:
         self.products.append(product)
 
     def removeProduct(self, productId: int):
-        self.products = [p for p in self.products if p.productId != productId]
+        new_products = []
+        
+        for p in self.products:
+            if p.productId != productId:
+                new_products.append(p)
+        
+        self.products = new_products
 
     def checkStock(self, productId: int):
         for product in self.products:

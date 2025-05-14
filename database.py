@@ -242,18 +242,18 @@ class Database:
       ''', (order_id,))
       return cursor.fetchall()
 
-    def _return_order_items_to_stock(self, order_id: int):
-        cursor = self.conn.cursor()
+    # def _return_order_items_to_stock(self, order_id: int):
+    #     cursor = self.conn.cursor()
         
-        cursor.execute('SELECT productId, quantity FROM order_items WHERE orderId = ?', (order_id,))
-        items = cursor.fetchall()
+    #     cursor.execute('SELECT productId, quantity FROM order_items WHERE orderId = ?', (order_id,))
+    #     items = cursor.fetchall()
         
-        for product_id, quantity in items:
-            cursor.execute('''
-            UPDATE products 
-            SET stockQuantity = stockQuantity + ?
-            WHERE productId = ?
-            ''', (quantity, product_id))
+    #     for product_id, quantity in items:
+    #         cursor.execute('''
+    #         UPDATE products 
+    #         SET stockQuantity = stockQuantity + ?
+    #         WHERE productId = ?
+    #         ''', (quantity, product_id))
     
     def get_shipment_details(self, shipment_id: int) -> Optional[Dict[str, Any]]:
       cursor = self.conn.cursor()
@@ -288,13 +288,26 @@ class Database:
         WHERE oi.orderId = ?
         ''', (order_id,))
         columns = [column[0] for column in cursor.description]
-        return [dict(zip(columns, row)) for row in cursor.fetchall()]
+        rows = cursor.fetchall()
+        result = []
+        
+        for row in rows:
+          item = dict(zip(columns,row))
+          result.append(item)
+        return result
 
     def get_all_orders(self) -> List[Dict[str, Any]]:
         cursor = self.conn.cursor()
         cursor.execute('SELECT * FROM orders ORDER BY orderDate DESC')
         columns = [column[0] for column in cursor.description]
-        return [dict(zip(columns, row)) for row in cursor.fetchall()]
+        rows = cursor.fetchall()
+        result = []
+        
+        for row in rows:
+          item = dict(zip(columns,row))
+          result.append(item)
+        return result
+        # return [dict(zip(columns, row)) for row in cursor.fetchall()]
       
     def get_all_shipments(self) -> List[Dict[str, Any]]:
       cursor = self.conn.cursor()
@@ -312,7 +325,13 @@ class Database:
       ORDER BY s.shipmentDate DESC
       ''')
       columns = [column[0] for column in cursor.description]
-      return [dict(zip(columns, row)) for row in cursor.fetchall()]
+      rows = cursor.fetchall()
+      result = []
+        
+      for row in rows:
+        item = dict(zip(columns,row))
+        result.append(item)
+      return result
 
     def update_product_stock(self, productId: int, quantity: int):
         cursor = self.conn.cursor()

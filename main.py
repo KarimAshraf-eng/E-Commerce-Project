@@ -13,7 +13,13 @@ def main():
     warehouse = Warehouse(1, "New York", 500)
     employee = Employee(1, "Alice", "Manager")
 
-    products = {p['productId']: Product(**p) for p in db.get_all_products()}
+    products = {}
+    all_products = db.get_all_products()
+    for p in all_products:
+      product_id = p['productId']
+      product_object = Product(**p)
+      product[product_id] = product_object
+    # products = {p['productId']: Product(**p) for p in db.get_all_products()}
     orders = {}
     shipments = {}
     

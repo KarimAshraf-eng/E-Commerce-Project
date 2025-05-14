@@ -20,7 +20,6 @@ class Order:
       if self.status == "Shipped":
           raise ValueError("Cannot cancel shipped order")
       
-      # إرجاع الكميات إلى المخزون
       for item in self.items:
           item.product.stockQuantity += item.quantity
       
